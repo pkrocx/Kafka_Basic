@@ -1,0 +1,49 @@
+version: "3.7"
+services:
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      # ZOOKER_TICK_TIME : 2000
+    # ports:
+    #     - 2181:2181 
+
+  kafka:
+    image: confluentinc/cp-kafka
+    depends_on: 
+        - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID : 1
+      KAFKA_OFFSETS_REPLICATION_FACTOR : 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS : PLAINTEXT://kafka:9092 , PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP : PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+
+  # postgres:
+  #   image : postgres:12
+  #   restart: always
+  #   environment:
+  #       - POSTGRES_USER=root
+  #       - POSTGRES_PASSWORD=CHITTI
+  #       # - POSTGRES_HOST_AUTH_METHOD: trust
+  #       # - POSTGRES_DB=PKROCX
+  #   ports:
+  #       - "5432:5432"
+    
+  #   # volumes:
+  #   #     - data:/var/lib/postresql/data
+
+  # pgadmin:
+  #   image: dpage/pgadmin4:6
+  #   restart: always
+  #   environment:
+  #       - PGADMIN_DEFAULT_EMAIL=saack@gmail.com
+  #       - PGADMIN_DEFAULT_PASSWORD=mlckpk
+  #   ports:
+  #       - "8080:80"
+
+# volumes:
+#   data:
